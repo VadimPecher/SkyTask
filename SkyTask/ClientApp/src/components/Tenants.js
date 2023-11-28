@@ -1,18 +1,21 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export class Tenants extends Component {
-    static displayName = Tenants.name;
+export function Tenants() {
+    const [tenants, setTenants] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    constructor(props) {
-        super(props);
-        this.state = { tenants: [], loading: true };
-    }
+    useEffect(() => {
+        const dataFetch = async () => {
+            const response = await fetch('tenants');
+            const data = await response.json();
+            setTenants(data);
+            setLoading(false);
+        };
 
-    componentDidMount() {
-        this.populateData();
-    }
+        dataFetch();
+    }, []);
 
-    static renderTable(tenants) {
+    const renderTable = (tenants) => {
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
@@ -37,23 +40,14 @@ export class Tenants extends Component {
         );
     }
 
-    render() {
-        let contents = this.state.loading
-            ? <p><em>Loading...</em></p>
-            : Tenants.renderTable(this.state.tenants);
-
-        return (
-            <div>
-                <h1 id="tabelLabel" >Tenants</h1>
-                {contents}
-                <a href="/edit-tenant">Add tenant</a>
-            </div>
-        );
-    }
-
-    async populateData() {
-        const response = await fetch('tenants');
-        const data = await response.json();
-        this.setState({ tenants: data, loading: false });
-    }
+    return (
+        <div>
+            <h1 id="tabelLabel" >Tenants</h1>
+            {loading
+                ? <p><em>Loading...</em></p>
+                : renderTable(tenants)
+            }
+            <a href="/edit-tenant">Add tenant</a>
+        </div>
+    );
 }
