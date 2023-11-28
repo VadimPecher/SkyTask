@@ -1,19 +1,14 @@
-import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
-import { Home } from "./components/Home";
+import { Tenants } from "./components/Tenants";
+import { EditTenant } from "./components/EditTenant";
 
 const AppRoutes = [
   {
     index: true,
-    element: <Home />
+    element: <Tenants />
   },
   {
-    path: '/counter',
-    element: <Counter />
-  },
-  {
-    path: '/fetch-data',
-    element: <FetchData />
+    path: 'edit-tenant/:id?',
+    element: <EditTenant />
   }
 ];
 
